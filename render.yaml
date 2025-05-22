@@ -5,7 +5,7 @@ services:
     repo: https://github.com/manuelescola/GenAI_IRPF_chatbot
     plan: free
     branch: main
-    dockerfilePath: Dockerfile
+    dockerfilePath: Dockerfile.frontend
     dockerContext: .
     envVars:
       - key: OPENAI_API_KEY
@@ -17,7 +17,7 @@ services:
     repo: https://github.com/manuelescola/GenAI_IRPF_chatbot
     plan: free
     branch: main
-    dockerfilePath: Dockerfile
+    dockerfilePath: Dockerfile.backend
     dockerContext: .
     envVars:
       - key: OPENAI_API_KEY
