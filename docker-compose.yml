@@ -1,0 +1,27 @@
+# docker-compose.yml  
+version: "3.9"         
+
+services:
+  ingest:
+    build: .
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+      - chroma_store:/app/.chroma
+    command: >
+      python -m scripts.ingest_pdf data/RENTA_2024.pdf
+
+  backend:                       
+    build: .
+    command: uvicorn rag.api:app --host 0.0.0.0 --port 8000
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+      - chroma_store:/app/.chroma
+
+volumes:
+  chroma_store:                  

@@ -1,0 +1,20 @@
+# For the vector database
+chromadb>=0.5.0
+openai>=1.14
+pypdf[crypto]
+langchain-text-splitters  # replaces langchain core splitters
+tiktoken                 # tokenizer used by TokenTextSplitter
+python-dotenv            # read OPENAI_API_KEY at runtime
+rich                    # nice-to-have logging
+tqdm                    # nice-to-have progress bars
+tenacity
+cryptography
+
+# For the chatbot backend
+langchain-core              # lightweight abstractions only
+langchain-openai            # ↔ OpenAI completion & embeddings
+fastapi                     # if you want an HTTP endpoint
+uvicorn[standard]           # if you want an HTTP endpoint
+sse-starlette               # server-sent events for streaming in Streamlit
+python-dotenv               # already there, but keep using for API keys
+pytest
