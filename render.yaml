@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: frontend
+    env: docker
+    repo: https://github.com/manuelescola/GenAI_IRPF_chatbot
+    plan: free
+    branch: main
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+    buildCommand: docker compose build frontend
+    startCommand: docker compose run frontend
+
+  - type: web
+    name: backend
+    env: docker
+    repo: https://github.com/manuelescola/GenAI_IRPF_chatbot
+    plan: free
+    branch: main
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+    buildCommand: docker compose build backend
+    startCommand: docker compose run backend
