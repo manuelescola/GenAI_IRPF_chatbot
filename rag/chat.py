@@ -15,23 +15,20 @@ _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def stream_answer(question: str) -> Generator[str, None, None]:
     retriever = ChromaRetriever(k=4)
-    docs      = retriever(question)
-    messages  = make_messages(question, docs)
+    docs = retriever(question)
+    messages = make_messages(question, docs)
 
     response = _client.chat.completions.create(
         model=_MODEL,
         messages=messages,
         temperature=_TEMPERATURE,
-        stream=True
+        stream=True,
     )
-    buffer = ""
+
+    full_output = ""
+
     for chunk in response:
-        delta = chunk.choices[0].delta.content or ""
-        buffer += delta
+        token = chunk.choices[0].delta.content or ""
+        full_output += token
 
-        if any(c in delta for c in [".", "\n"]):  # stream in chunks
-            yield linkify_citations(buffer)
-            buffer = ""
-
-    if buffer:
-        yield linkify_citations(buffer)
+    yield linkify_citations(full_output.strip())
