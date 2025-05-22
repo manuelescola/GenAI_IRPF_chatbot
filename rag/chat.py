@@ -1,10 +1,14 @@
+# rag/chat.py
 import os
+import re
 from typing import Generator
 from openai import OpenAI
 from .retriever import ChromaRetriever
 from .prompt import make_messages
+from .utils import linkify_citations
 
-_MODEL = "gpt-4o-mini"          # or gpt-3.5-turbo
+
+_MODEL = "gpt-4o" # before I had the following: "gpt-4o-mini"          # or gpt-3.5-turbo
 _TEMPERATURE = 0.2
 
 _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -20,6 +24,14 @@ def stream_answer(question: str) -> Generator[str, None, None]:
         temperature=_TEMPERATURE,
         stream=True
     )
+    buffer = ""
     for chunk in response:
         delta = chunk.choices[0].delta.content or ""
-        yield delta
+        buffer += delta
+
+        if any(c in delta for c in [".", "\n"]):  # stream in chunks
+            yield linkify_citations(buffer)
+            buffer = ""
+
+    if buffer:
+        yield linkify_citations(buffer)
