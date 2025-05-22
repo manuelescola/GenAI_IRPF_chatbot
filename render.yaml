@@ -10,8 +10,6 @@ services:
     envVars:
       - key: OPENAI_API_KEY
         sync: false
-    buildCommand: docker compose build frontend
-    startCommand: docker compose run frontend
 
   - type: web
     name: backend
@@ -24,5 +22,3 @@ services:
     envVars:
       - key: OPENAI_API_KEY
         sync: false
-    buildCommand: docker compose build backend
-    startCommand: docker compose run backend
