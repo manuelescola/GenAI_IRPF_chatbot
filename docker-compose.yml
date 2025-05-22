@@ -1,5 +1,4 @@
-# docker-compose.yml  
-version: "3.9"         
+version: "3.9"
 
 services:
   ingest:
@@ -13,7 +12,7 @@ services:
     command: >
       python -m scripts.ingest_pdf data/RENTA_2024.pdf
 
-  backend:                       
+  backend:
     build: .
     command: uvicorn rag.api:app --host 0.0.0.0 --port 8000
     environment:
@@ -23,5 +22,17 @@ services:
       - .:/app
       - chroma_store:/app/.chroma
 
+  frontend:
+    build: .
+    command: streamlit run frontend/streamlit_app.py --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+      - chroma_store:/app/.chroma
+
 volumes:
-  chroma_store:                  
+  chroma_store:

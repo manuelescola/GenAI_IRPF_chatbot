@@ -18,3 +18,6 @@ uvicorn[standard]           # if you want an HTTP endpoint
 sse-starlette               # server-sent events for streaming in Streamlit
 python-dotenv               # already there, but keep using for API keys
 pytest
+
+# For the chatbot frontend
+streamlit                  # if you want a web UI
