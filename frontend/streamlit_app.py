@@ -1,4 +1,7 @@
 # frontend/streamlit_app.py
+import sys, os
+sys.path.append(os.path.abspath("."))
+
 import streamlit as st
 from rag.chat import stream_answer
 import re

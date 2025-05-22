@@ -1,4 +1,4 @@
-# rag/retriever.py  – final minimal fix
+# rag/retriever.py
 from typing import List, Dict
 import os, chromadb
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
@@ -14,7 +14,7 @@ _embed = OpenAIEmbeddingFunction(
 class ChromaRetriever:
     def __init__(self, k: int = 4):
         client = chromadb.PersistentClient(path=_CHROMA_PATH)
-        self.col = client.get_collection(_COLLECTION)   # no embedder here
+        self.col = client.get_collection(_COLLECTION)   
         self.k   = k
 
     def __call__(self, query: str) -> List[Dict]:
