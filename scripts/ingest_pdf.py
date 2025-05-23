@@ -1,3 +1,4 @@
+# scripts/ingest_pdf.py
 """
 CLI entrypoint that reads a PDF and stuffs its chunks into Chroma.
 Usage:

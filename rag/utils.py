@@ -1,3 +1,4 @@
+# rag/utils.py
 import re
 
 _PDF_URL = "https://manuelescola.github.io/GenAI_IRPF_chatbot/RENTA_2024.pdf"

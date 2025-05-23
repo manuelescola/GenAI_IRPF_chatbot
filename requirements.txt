@@ -9,6 +9,8 @@ rich                    # nice-to-have logging
 tqdm                    # nice-to-have progress bars
 tenacity
 cryptography
+tiktoken
+pinecone
 
 # For the chatbot backend
 langchain-core              # lightweight abstractions only

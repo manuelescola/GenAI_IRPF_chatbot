@@ -1,3 +1,4 @@
+#ingest/chunker.py
 from langchain_text_splitters import TokenTextSplitter
 _SPLITTER = TokenTextSplitter(chunk_size=500, chunk_overlap=50)
 

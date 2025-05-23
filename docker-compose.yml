@@ -3,8 +3,8 @@ version: "3.9"
 services:
   ingest:
     build: .
+    env_file: .env
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PYTHONPATH=/app
     volumes:
       - .:/app
@@ -14,9 +14,9 @@ services:
 
   backend:
     build: .
+    env_file: .env
     command: uvicorn rag.api:app --host 0.0.0.0 --port 8000
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PYTHONPATH=/app
     volumes:
       - .:/app
@@ -24,11 +24,11 @@ services:
 
   frontend:
     build: .
+    env_file: .env
     command: streamlit run frontend/streamlit_app.py --server.address=0.0.0.0
     ports:
       - "8501:8501"
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PYTHONPATH=/app
     volumes:
       - .:/app

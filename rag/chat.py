@@ -3,7 +3,8 @@ import os
 import re
 from typing import Generator
 from openai import OpenAI
-from .retriever import ChromaRetriever
+#from .retriever import ChromaRetriever
+from .retriever_pinecone import PineconeRetriever as ChromaRetriever  # temporary alias
 from .prompt import make_messages
 from .utils import linkify_citations
 

@@ -1,22 +1,41 @@
-import os, time
-import openai
+# ingest/embedder.py
+import os
 from openai import OpenAI
-from tenacity import retry, wait_exponential, stop_after_attempt
+from typing import List
+import tiktoken
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), max_retries=0)
+MODEL = "text-embedding-3-large"
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@retry(wait=wait_exponential(multiplier=1, min=1, max=60),
-       stop=stop_after_attempt(6))
-def _emb(texts: list[str]) -> list[list[float]]:
-    resp = client.embeddings.create(
-        input=texts,
-        model="text-embedding-3-large"
-    )
-    return [d.embedding for d in resp.data]
+# Estimate tokens using tiktoken
+def count_tokens(text: str, model: str = MODEL) -> int:
+    enc = tiktoken.encoding_for_model(model)
+    return len(enc.encode(text))
 
-def embed(chunks: list[dict], batch_size: int = 96):
-    for i in range(0, len(chunks), batch_size):
-        batch = chunks[i : i + batch_size]
-        vectors = _emb([c["text"] for c in batch])
-        for c, v in zip(batch, vectors):
-            c["embedding"] = v
+def embed(chunks: List[dict]) -> None:
+    max_tokens_per_batch = 300000
+    batch = []
+    token_count = 0
+
+    for chunk in chunks:
+        tokens = count_tokens(chunk["text"])
+        if token_count + tokens > max_tokens_per_batch:
+            # Send current batch
+            texts = [c["text"] for c in batch]
+            response = client.embeddings.create(model=MODEL, input=texts)
+            embeddings = [r.embedding for r in response.data]
+            for i, emb in enumerate(embeddings):
+                batch[i]["embedding"] = emb
+            batch.clear()
+            token_count = 0
+
+        batch.append(chunk)
+        token_count += tokens
+
+    # Process any remaining batch
+    if batch:
+        texts = [c["text"] for c in batch]
+        response = client.embeddings.create(model=MODEL, input=texts)
+        embeddings = [r.embedding for r in response.data]
+        for i, emb in enumerate(embeddings):
+            batch[i]["embedding"] = emb
