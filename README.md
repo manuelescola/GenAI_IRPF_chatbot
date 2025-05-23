@@ -1,6 +1,7 @@
 # GenAI_IRPF_chatbot
 This repo creates an AI that helps you prepare the income tax in Spain.
 
+```
 GenAI_IRPF_chatbot/vector_database
 │
 ├─ ingest/                   ← Python package
@@ -33,3 +34,5 @@ GenAI_IRPF_chatbot/chatbot_backend
 │
 ├─ configs/
 │   └─ rag.yaml                 # tunable params: k, model, temperature…
+
+```
